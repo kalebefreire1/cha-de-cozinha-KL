@@ -72,8 +72,8 @@
             </div>
             
             
-            <br/><p id="header-text" class="text-gray-500 max-w-2xl mx-auto"></p>
-            <p class="mt-4 text-sm text-gray-500 max-w-2xl mx-auto italic">Os preços e links são apenas sugestões. Sinta-se à vontade para comprar em sua loja de preferência! </p>
+            <p id="header-text" class="text-gray-500 max-w-2xl mx-auto mt-6"></p>
+            <p class="mt-4 text-sm text-gray-500 max-w-2xl mx-auto italic">Os preços e links são apenas sugestões. Sinta-se à vontade para comprar em sua loja de preferência! Ao final da página há um botão para apenas confirmar a presença.</p>
         </div>
     </header>
 
@@ -81,6 +81,14 @@
     <main id="gift-list-container" class="container mx-auto px-6 py-12 hidden">
         <div id="gift-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Os cards de presentes serão inseridos aqui pelo JavaScript -->
+        </div>
+        
+        <!-- Botão para Confirmar Presença sem Presente -->
+        <div id="confirm-only-button-container" class="text-center mt-12">
+            <button onclick="confirmPresenceOnly()" class="bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors shadow-md">
+                Apenas Confirmar Presença
+            </button>
+            <p class="text-xs text-gray-500 mt-2">Você pode voltar mais tarde para escolher um presente.</p>
         </div>
     </main>
     
@@ -111,13 +119,48 @@
         </div>
     </div>
 
+    <!-- Modal de Pergunta sobre Acompanhante -->
+    <div id="companion-prompt-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Acompanhantes</h2>
+            <p class="mb-8 text-gray-600">Você levará acompanhante(s) para o evento?</p>
+            <div class="flex justify-center space-x-4">
+                <button onclick="handleCompanionPrompt(false)" class="px-8 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não</button>
+                <button onclick="handleCompanionPrompt(true)" class="px-8 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Sim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Acompanhante -->
+    <div id="companion-details-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Dados dos Acompanhantes</h2>
+            <p id="companion-instructions" class="mb-6 text-gray-600">Por favor, preencha as informações de cada acompanhante para a lista da portaria.</p>
+            <div id="companion-list" class="text-left mb-4 text-sm text-gray-500 max-h-24 overflow-y-auto"></div>
+            <div>
+                <label for="companion-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nome completo do acompanhante</label>
+                <input type="text" id="companion-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite o nome completo">
+                <p id="companion-name-error" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha o nome.</p>
+            </div>
+            <div class="mt-4">
+                <label for="companion-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nº do Documento (RG ou CNH)</label>
+                <input type="text" id="companion-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números">
+                <p id="companion-document-error" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha o documento.</p>
+            </div>
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <button onclick="addAnotherCompanion()" class="w-full px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors">Adicionar Outro</button>
+                <button onclick="finishCompanionRegistration()" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Finalizar e Continuar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Cadastro de Documento -->
     <div id="document-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
-            <h2 class="text-2xl font-bold mb-4 text-gray-800">Acesso ao Evento</h2>
-            <p class="mb-6 text-gray-600">Para garantir sua entrada no condomínio, por favor, informe um documento de identificação (RG ou CNH).</p>
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Seu Acesso ao Evento</h2>
+            <p class="mb-6 text-gray-600">Agora, para finalizar, informe o seu documento de identificação (RG ou CNH) para a lista da portaria.</p>
             <div>
-                <label for="guest-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nº do Documento (RG ou CNH)</label>
+                <label for="guest-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu Nº de Documento (RG ou CNH)</label>
                 <input type="text" id="guest-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números">
                 <p id="document-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu documento.</p>
             </div>
@@ -181,6 +224,33 @@
         </div>
     </div>
 
+     <!-- Modal de Agradecimento -->
+    <div id="thank-you-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">Obrigado!</h2>
+            <p class="mb-6 text-gray-600">Sua presença foi confirmada com sucesso! Agradecemos seu carinho. Se mudar de ideia sobre o presente, basta visitar esta página novamente.</p>
+            <div class="mt-8 flex justify-end">
+                <button onclick="hideModal('thank-you-modal')" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player de Música
+    <audio id="background-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_2425232dc1.mp3?filename=lofi-chill-medium-version-159456.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
+    <button id="play-pause-btn" class="fixed bottom-5 right-5 bg-pink-600 text-white p-3 rounded-full shadow-lg z-50 hover:bg-pink-700 transition-colors focus:outline-none">
+        <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    </button>-->
+
 
     <script>
         // --- INÍCIO DA ÁREA DE EDIÇÃO ---
@@ -236,16 +306,25 @@
         const giftListMainContainer = document.getElementById('gift-list-container');
         const rsvpModal = document.getElementById('rsvp-modal');
         const documentModal = document.getElementById('document-modal');
+        const companionPromptModal = document.getElementById('companion-prompt-modal');
+        const companionDetailsModal = document.getElementById('companion-details-modal');
         const reserveModal = document.getElementById('reserve-modal');
         const cancelModal = document.getElementById('cancel-modal');
         const giversModal = document.getElementById('givers-modal');
         const passwordModal = document.getElementById('password-modal');
+        const thankYouModal = document.getElementById('thank-you-modal');
         const modalGiftName = document.getElementById('modal-gift-name');
         const cancelModalGiftName = document.getElementById('cancel-modal-gift-name');
         const rsvpGuestNameInput = document.getElementById('rsvp-guest-name');
         const rsvpErrorMessage = document.getElementById('rsvp-error-message');
         const guestDocumentInput = document.getElementById('guest-document');
         const documentErrorMessage = document.getElementById('document-error-message');
+        const companionNameInput = document.getElementById('companion-name');
+        const companionDocumentInput = document.getElementById('companion-document');
+        const companionNameError = document.getElementById('companion-name-error');
+        const companionDocumentError = document.getElementById('companion-document-error');
+        const companionListDiv = document.getElementById('companion-list');
+        const companionInstructions = document.getElementById('companion-instructions');
         const hostPasswordInput = document.getElementById('host-password');
         const passwordErrorMessage = document.getElementById('password-error-message');
         const giversListContent = document.getElementById('givers-list-content');
@@ -312,6 +391,7 @@
             setTimeout(() => modal.querySelector('div.modal-enter').classList.add('modal-enter-active'), 10);
             if (modalId === 'rsvp-modal') rsvpGuestNameInput.focus();
             if (modalId === 'document-modal') guestDocumentInput.focus();
+            if (modalId === 'companion-details-modal') companionNameInput.focus();
             if (modalId === 'password-modal') hostPasswordInput.focus();
         };
 
@@ -331,6 +411,17 @@
             }, 300);
         };
 
+        function saveConfirmedGuest(guestData) {
+            const existingGuests = JSON.parse(localStorage.getItem('bridalShowerConfirmedGuests')) || [];
+            const guestIndex = existingGuests.findIndex(g => g.name === guestData.name);
+            if (guestIndex > -1) {
+                existingGuests[guestIndex] = guestData; 
+            } else {
+                existingGuests.push(guestData);
+            }
+            localStorage.setItem('bridalShowerConfirmedGuests', JSON.stringify(existingGuests));
+        }
+
         window.handleRSVP = (isAttending) => {
             const name = rsvpGuestNameInput.value.trim();
             if (!name) {
@@ -338,11 +429,104 @@
                 rsvpGuestNameInput.classList.add('border-red-500');
                 return;
             }
-            guestInfo = { name: name, attending: isAttending, document: null };
-            localStorage.setItem('bridalShowerGuestInfo', JSON.stringify(guestInfo));
+            guestInfo = { name: name, attending: isAttending, document: null, companions: [] };
             
             hideModal('rsvp-modal');
-            initializePage();
+            
+            if (isAttending) {
+                showModal('companion-prompt-modal');
+            } else {
+                saveConfirmedGuest(guestInfo);
+                localStorage.setItem('bridalShowerGuestInfo', JSON.stringify(guestInfo));
+                initializePage();
+            }
+        };
+
+        window.handleCompanionPrompt = (hasCompanion) => {
+            hideModal('companion-prompt-modal');
+            if (hasCompanion) {
+                companionNameInput.value = '';
+                companionDocumentInput.value = '';
+                companionInstructions.textContent = "Por favor, preencha as informações do seu acompanhante para a lista da portaria.";
+                updateCompanionList();
+                showModal('companion-details-modal');
+            } else {
+                showModal('document-modal');
+            }
+        };
+
+        function validateCompanionForm() {
+            const name = companionNameInput.value.trim();
+            const doc = companionDocumentInput.value.trim();
+            let hasError = false;
+
+            if (!name) {
+                companionNameError.classList.remove('hidden');
+                companionNameInput.classList.add('border-red-500');
+                hasError = true;
+            } else {
+                companionNameError.classList.add('hidden');
+                companionNameInput.classList.remove('border-red-500');
+            }
+
+            if (!doc) {
+                companionDocumentError.classList.remove('hidden');
+                companionDocumentInput.classList.add('border-red-500');
+                hasError = true;
+            } else {
+                companionDocumentError.classList.add('hidden');
+                companionDocumentInput.classList.remove('border-red-500');
+            }
+            
+            return hasError ? null : { name, document: doc };
+        }
+    
+        function updateCompanionList() {
+            if (guestInfo && guestInfo.companions.length > 0) {
+                companionListDiv.innerHTML = '<strong class="block mb-2">Acompanhantes adicionados:</strong><ul class="list-disc pl-5">' + 
+                    guestInfo.companions.map(c => `<li>${c.name}</li>`).join('') + 
+                '</ul>';
+            } else {
+                companionListDiv.innerHTML = '';
+            }
+        }
+
+        window.addAnotherCompanion = () => {
+            const companionData = validateCompanionForm();
+            if (companionData) {
+                if (guestInfo) {
+                    guestInfo.companions.push(companionData);
+                    companionNameInput.value = '';
+                    companionDocumentInput.value = '';
+                    companionInstructions.textContent = "Acompanhante adicionado! Preencha os dados do próximo ou clique em 'Finalizar e Continuar'.";
+                    updateCompanionList();
+                    companionNameInput.focus();
+                } else {
+                    alert('Ocorreu um erro. Por favor, recarregue a página.');
+                }
+            }
+        };
+        
+        window.finishCompanionRegistration = () => {
+            const name = companionNameInput.value.trim();
+            const doc = companionDocumentInput.value.trim();
+
+            if (name || doc) {
+                const companionData = validateCompanionForm();
+                if (companionData) {
+                    if (guestInfo) {
+                        guestInfo.companions.push(companionData);
+                    } else {
+                        alert('Ocorreu um erro. Por favor, recarregue a página.');
+                        return;
+                    }
+                } else {
+                    return; 
+                }
+            }
+            
+            hideModal('companion-details-modal');
+            showModal('document-modal');
         };
 
         window.saveDocument = () => {
@@ -363,6 +547,15 @@
             }
         };
 
+        window.confirmPresenceOnly = () => {
+            if (guestInfo) {
+                saveConfirmedGuest(guestInfo);
+                showModal('thank-you-modal');
+            } else {
+                alert('Ocorreu um erro. Por favor, recarregue a página.');
+            }
+        };
+
         window.checkPassword = () => {
             const enteredPassword = hostPasswordInput.value;
             if (enteredPassword === hostPassword) {
@@ -375,17 +568,18 @@
         };
 
         window.confirmReservation = () => {
-            if (!guestInfo) {
-                alert('Ocorreu um erro. Por favor, recarregue a página.');
-                return;
+            if (guestInfo) {
+                saveConfirmedGuest(guestInfo);
+                const giftIndex = appGifts.findIndex(g => g.id === currentGiftId);
+                if (giftIndex !== -1) {
+                    appGifts[giftIndex].reservedBy = guestInfo;
+                    saveGifts(appGifts);
+                    renderGifts();
+                }
+                hideModal('reserve-modal');
+            } else {
+                 alert('Ocorreu um erro. Por favor, recarregue a página.');
             }
-            const giftIndex = appGifts.findIndex(g => g.id === currentGiftId);
-            if (giftIndex !== -1) {
-                appGifts[giftIndex].reservedBy = guestInfo;
-                saveGifts(appGifts);
-                renderGifts();
-            }
-            hideModal('reserve-modal');
         };
 
         window.confirmCancellation = () => {
@@ -399,32 +593,52 @@
         };
 
         window.showGiversList = () => {
+            const confirmedGuests = JSON.parse(localStorage.getItem('bridalShowerConfirmedGuests')) || [];
             const currentGifts = loadGifts();
-            const reservedGifts = currentGifts.filter(gift => gift.reservedBy);
 
-            if (reservedGifts.length === 0) {
-                giversListContent.innerHTML = '<p>Nenhum presente foi reservado ainda.</p>';
+            if (confirmedGuests.length === 0) {
+                giversListContent.innerHTML = '<p>Nenhum convidado confirmou presença ainda.</p>';
             } else {
                 let listHtml = '<ul class="space-y-4">';
-                reservedGifts.forEach(gift => {
-                    const rsvpStatus = gift.reservedBy.attending 
+
+                confirmedGuests.forEach(guest => {
+                    const reservedGift = currentGifts.find(gift => gift.reservedBy && gift.reservedBy.name === guest.name);
+
+                    const rsvpStatus = guest.attending 
                         ? '<span class="text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded-full">PRESENÇA CONFIRMADA</span>'
                         : '<span class="text-xs font-semibold text-orange-700 bg-orange-100 px-2 py-1 rounded-full">NÃO PODERÁ COMPARECER</span>';
 
-                    const documentInfo = gift.reservedBy.attending && gift.reservedBy.document
-                        ? `<br><span class="text-sm text-gray-500">Documento:</span> <span class="text-gray-900">${gift.reservedBy.document}</span>`
+                    const documentInfo = guest.attending && guest.document
+                        ? `<br><span class="text-sm text-gray-500">Documento:</span> <span class="text-gray-900">${guest.document}</span>`
                         : '';
+                    
+                    let companionInfo = '';
+                    if (guest.companions && guest.companions.length > 0) {
+                        companionInfo += '<div class="mt-2 pl-4 border-l-2 border-gray-200">';
+                        guest.companions.forEach(comp => {
+                            companionInfo += `<div class="mb-1">
+                                <span class="text-sm font-semibold text-gray-600">Acompanhante:</span> <span class="text-pink-700">${comp.name}</span><br>
+                                <span class="text-sm text-gray-500">Documento:</span> <span class="text-gray-900">${comp.document}</span>
+                            </div>`;
+                        });
+                        companionInfo += '</div>';
+                    }
+
+                    const giftInfo = reservedGift
+                        ? `<div class="mt-2"><span class="text-sm font-semibold text-gray-600">Presente Escolhido:</span> <span class="text-gray-900">${reservedGift.name}</span></div>`
+                        : `<div class="mt-2"><span class="text-sm font-semibold text-gray-600">Presente Escolhido:</span> <span class="text-gray-500 italic">Ainda não escolheu</span></div>`;
 
                     listHtml += `
                         <li class="border-b pb-3">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <span class="font-semibold text-gray-800">${gift.name}</span><br>
-                                    <span class="text-sm text-gray-500">Reservado por:</span> <span class="text-pink-700">${gift.reservedBy.name}</span>
+                                    <span class="font-semibold text-lg text-gray-800">${guest.name}</span>
                                     ${documentInfo}
                                 </div>
                                 <div class="mt-1">${rsvpStatus}</div>
                             </div>
+                            ${companionInfo}
+                            ${giftInfo}
                         </li>`;
                 });
                 listHtml += '</ul>';
@@ -440,8 +654,8 @@
                 guestInfo = JSON.parse(storedGuestInfo);
 
                 if (guestInfo.attending && !guestInfo.document) {
-                    headerText.textContent = `Olá, ${guestInfo.name}! Falta apenas um passo para finalizar.`;
-                    showModal('document-modal');
+                    headerText.textContent = `Olá, ${guestInfo.name}! Faltam alguns passos para finalizar.`;
+                    showModal('companion-prompt-modal');
                 } else {
                     headerText.textContent = `Olá, ${guestInfo.name}! Sua presença é o maior presente! Mas, se desejar nos presentear, preparamos esta lista com muito carinho. Para reservar um item, basta clicar em "Quero dar este presente!"`;
                     giftListMainContainer.classList.remove('hidden');
@@ -453,11 +667,10 @@
             }
         }
         
-        [rsvpModal, documentModal, reserveModal, giversModal, passwordModal, cancelModal].forEach(modal => {
+        [rsvpModal, documentModal, companionPromptModal, companionDetailsModal, reserveModal, giversModal, passwordModal, cancelModal, thankYouModal].forEach(modal => {
             if (modal) {
                 modal.addEventListener('click', (event) => {
-                    // Impede que o modal feche ao clicar dentro do conteúdo, exceto os que são parte do fluxo inicial
-                    if (event.target === modal && modal.id !== 'rsvp-modal' && modal.id !== 'document-modal') {
+                    if (event.target === modal && !['rsvp-modal', 'document-modal', 'companion-prompt-modal', 'companion-details-modal'].includes(modal.id)) {
                         hideModal(modal.id);
                     }
                 });
@@ -470,10 +683,47 @@
                 if (!cancelModal.classList.contains('hidden')) hideModal('cancel-modal');
                 if (!giversModal.classList.contains('hidden')) hideModal('givers-modal');
                 if (!passwordModal.classList.contains('hidden')) hideModal('password-modal');
+                if (!thankYouModal.classList.contains('hidden')) hideModal('thank-you-modal');
             }
         });
 
-        document.addEventListener('DOMContentLoaded', initializePage);
+         document.addEventListener('DOMContentLoaded', () => {
+            initializePage();
+
+           // --- Lógica do Player de Música ---
+        //    const backgroundMusic = document.getElementById('background-music');
+        //    const playPauseBtn = document.getElementById('play-pause-btn');
+        //    const playIcon = playPauseBtn.querySelector('#play-icon');
+        //    const pauseIcon = playPauseBtn.querySelector('#pause-icon');
+
+        //    playPauseBtn.addEventListener('click', () => {
+        //        if (backgroundMusic.paused) {
+        //            backgroundMusic.play();
+        //        } else {
+        //            backgroundMusic.pause();
+        //        }
+        //    });
+
+        //    backgroundMusic.addEventListener('play', () => {
+        //        playIcon.classList.add('hidden');
+        //        pauseIcon.classList.remove('hidden');
+        //    });
+
+        //    backgroundMusic.addEventListener('pause', () => {
+        //        playIcon.classList.remove('hidden');
+        //        pauseIcon.classList.add('hidden');
+        //    });
+
+        //    
+        //    document.body.addEventListener('click', () => {
+        //        let playPromise = backgroundMusic.play();
+        //        if (playPromise !== undefined) {
+        //            playPromise.catch(error => {
+        //                console.log("A reprodução automática foi bloqueada. O usuário precisa interagir.");
+        //            });
+        //        }
+        //    }, { once: true });
+        });
     </script>
 
 </body>
