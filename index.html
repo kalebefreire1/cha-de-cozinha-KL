@@ -51,7 +51,7 @@
 
             <!-- Informações do Evento -->
             <div class="mt-6 flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-8 text-gray-600">
-                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Ch%C3%A1%20de%20Cozinha%20-%20Kalebe%20%26%20Larissa&dates=20250903T003000Z/20250903T033000Z&details=Ch%C3%A1%20de%20Cozinha%20de%20Kalebe%20%26%20Larissa.&location=Jundia%C3%AD%2C%20SP" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-pink-800 transition-colors">
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Ch%C3%A1%20de%20Cozinha%20-%20Kalebe%20%26%20Larissa&dates=20251130T163000Z/20251130T193000Z&details=Ch%C3%A1%20de%20Cozinha%20de%20Kalebe%20%26%20Larissa.&location=Buffet%20Residencial%20Jasmim%20-%20Jundia%C3%AD%2C%20SP" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-pink-800 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-700" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
                     </svg>
@@ -71,8 +71,9 @@
                 </a>
             </div>
             
+            
             <br/><p id="header-text" class="text-gray-500 max-w-2xl mx-auto"></p>
-            <p class="mt-4 text-sm text-gray-500 max-w-2xl mx-auto italic">Os preços e links são apenas sugestões. Sinta-se à vontade para comprar em sua loja de preferência!</p>
+            <p class="mt-4 text-sm text-gray-500 max-w-2xl mx-auto italic">Os preços e links são apenas sugestões. Sinta-se à vontade para comprar em sua loja de preferência! </p>
         </div>
     </header>
 
@@ -82,7 +83,7 @@
             <!-- Os cards de presentes serão inseridos aqui pelo JavaScript -->
         </div>
     </main>
-
+    
     <!-- Rodapé -->
     <footer class="text-center py-6 text-gray-500">
         <p>Feito com ❤️</p>
@@ -104,8 +105,24 @@
                 <p id="rsvp-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu nome.</p>
             </div>
             <div class="mt-8 space-y-3">
-                <button onclick="handleRSVP(true)" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Confirmar Presença e Ver Presentes</button>
-                <button onclick="handleRSVP(false)" class="w-full px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não poderei ir</button>
+                <button onclick="handleRSVP(true)" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Confirmar Presença</button>
+                <button onclick="handleRSVP(false)" class="w-full px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não poderei ir, mas quero presentear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Documento -->
+    <div id="document-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Acesso ao Evento</h2>
+            <p class="mb-6 text-gray-600">Para garantir sua entrada no condomínio, por favor, informe um documento de identificação (RG ou CNH).</p>
+            <div>
+                <label for="guest-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nº do Documento (RG ou CNH)</label>
+                <input type="text" id="guest-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números">
+                <p id="document-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu documento.</p>
+            </div>
+            <div class="mt-8">
+                <button onclick="saveDocument()" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Salvar e Ver Presentes</button>
             </div>
         </div>
     </div>
@@ -137,7 +154,7 @@
     <!-- Modal para Lista de Presenteadores -->
     <div id="givers-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg mx-auto modal-enter">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800">Presentes Reservados</h2>
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Lista de Convidados e Presentes</h2>
             <div id="givers-list-content" class="text-gray-700 max-h-96 overflow-y-auto">
                 <!-- A lista será inserida aqui -->
             </div>
@@ -218,6 +235,7 @@
         const giftListContainer = document.getElementById('gift-list');
         const giftListMainContainer = document.getElementById('gift-list-container');
         const rsvpModal = document.getElementById('rsvp-modal');
+        const documentModal = document.getElementById('document-modal');
         const reserveModal = document.getElementById('reserve-modal');
         const cancelModal = document.getElementById('cancel-modal');
         const giversModal = document.getElementById('givers-modal');
@@ -226,6 +244,8 @@
         const cancelModalGiftName = document.getElementById('cancel-modal-gift-name');
         const rsvpGuestNameInput = document.getElementById('rsvp-guest-name');
         const rsvpErrorMessage = document.getElementById('rsvp-error-message');
+        const guestDocumentInput = document.getElementById('guest-document');
+        const documentErrorMessage = document.getElementById('document-error-message');
         const hostPasswordInput = document.getElementById('host-password');
         const passwordErrorMessage = document.getElementById('password-error-message');
         const giversListContent = document.getElementById('givers-list-content');
@@ -291,6 +311,7 @@
             modal.classList.remove('hidden');
             setTimeout(() => modal.querySelector('div.modal-enter').classList.add('modal-enter-active'), 10);
             if (modalId === 'rsvp-modal') rsvpGuestNameInput.focus();
+            if (modalId === 'document-modal') guestDocumentInput.focus();
             if (modalId === 'password-modal') hostPasswordInput.focus();
         };
 
@@ -317,10 +338,29 @@
                 rsvpGuestNameInput.classList.add('border-red-500');
                 return;
             }
-            const info = { name: name, attending: isAttending };
-            localStorage.setItem('bridalShowerGuestInfo', JSON.stringify(info));
+            guestInfo = { name: name, attending: isAttending, document: null };
+            localStorage.setItem('bridalShowerGuestInfo', JSON.stringify(guestInfo));
+            
             hideModal('rsvp-modal');
             initializePage();
+        };
+
+        window.saveDocument = () => {
+            const doc = guestDocumentInput.value.trim();
+            if (!doc) {
+                documentErrorMessage.classList.remove('hidden');
+                guestDocumentInput.classList.add('border-red-500');
+                return;
+            }
+            
+            if (guestInfo) {
+                guestInfo.document = doc;
+                localStorage.setItem('bridalShowerGuestInfo', JSON.stringify(guestInfo));
+                hideModal('document-modal');
+                initializePage();
+            } else {
+                alert('Ocorreu um erro. Por favor, recarregue a página e tente novamente.');
+            }
         };
 
         window.checkPassword = () => {
@@ -371,12 +411,17 @@
                         ? '<span class="text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded-full">PRESENÇA CONFIRMADA</span>'
                         : '<span class="text-xs font-semibold text-orange-700 bg-orange-100 px-2 py-1 rounded-full">NÃO PODERÁ COMPARECER</span>';
 
+                    const documentInfo = gift.reservedBy.attending && gift.reservedBy.document
+                        ? `<br><span class="text-sm text-gray-500">Documento:</span> <span class="text-gray-900">${gift.reservedBy.document}</span>`
+                        : '';
+
                     listHtml += `
                         <li class="border-b pb-3">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <span class="font-semibold text-gray-800">${gift.name}</span><br>
                                     <span class="text-sm text-gray-500">Reservado por:</span> <span class="text-pink-700">${gift.reservedBy.name}</span>
+                                    ${documentInfo}
                                 </div>
                                 <div class="mt-1">${rsvpStatus}</div>
                             </div>
@@ -393,20 +438,26 @@
             const storedGuestInfo = localStorage.getItem('bridalShowerGuestInfo');
             if (storedGuestInfo) {
                 guestInfo = JSON.parse(storedGuestInfo);
-                headerText.textContent = `Olá, ${guestInfo.name}! Sua presença é o maior presente! Mas, se desejar nos presentear, preparamos esta lista com muito carinho. Para reservar um item, basta clicar em "Quero dar este presente!".`;
-                giftListMainContainer.classList.remove('hidden');
-                renderGifts();
+
+                if (guestInfo.attending && !guestInfo.document) {
+                    headerText.textContent = `Olá, ${guestInfo.name}! Falta apenas um passo para finalizar.`;
+                    showModal('document-modal');
+                } else {
+                    headerText.textContent = `Olá, ${guestInfo.name}! Sua presença é o maior presente! Mas, se desejar nos presentear, preparamos esta lista com muito carinho. Para reservar um item, basta clicar em "Quero dar este presente!"`;
+                    giftListMainContainer.classList.remove('hidden');
+                    renderGifts();
+                }
             } else {
                 headerText.textContent = `Queridos amigos e familiares, sua presença é o maior presente! Para continuar, por favor, confirme sua presença.`;
                 showModal('rsvp-modal');
             }
         }
         
-        [rsvpModal, reserveModal, giversModal, passwordModal, cancelModal].forEach(modal => {
+        [rsvpModal, documentModal, reserveModal, giversModal, passwordModal, cancelModal].forEach(modal => {
             if (modal) {
                 modal.addEventListener('click', (event) => {
-                    // Impede que o modal feche ao clicar dentro do conteúdo, exceto o de rsvp
-                    if (event.target === modal && modal.id !== 'rsvp-modal') {
+                    // Impede que o modal feche ao clicar dentro do conteúdo, exceto os que são parte do fluxo inicial
+                    if (event.target === modal && modal.id !== 'rsvp-modal' && modal.id !== 'document-modal') {
                         hideModal(modal.id);
                     }
                 });
