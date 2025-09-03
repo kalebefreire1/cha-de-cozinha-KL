@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Presentes | Chá de Cozinha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Animação de fade-in para o modal */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms, transform 300ms;
+        }
+        .modal-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 300ms, transform 300ms;
+        }
+        #gift-list-container.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 text-gray-800">
+
+    <!-- Cabeçalho -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <h1 class="font-display text-4xl md:text-5xl text-pink-800">Chá de Cozinha</h1>
+            <p class="text-2xl text-gray-600 mt-2">Kalebe & Larissa</p>
+            
+            <img src="https://64.media.tumblr.com/2677137799ef9f5941362148789681a6/9330d53afbb73c1e-e6/s540x810/c85669f08a4577052dcc89bd897f2c54b955f472.gif" alt="Gatinho cozinhando" class="w-24 h-24 mx-auto my-6 rounded-full object-cover">
+
+            <!-- Informações do Evento -->
+            <div class="mt-6 flex flex-col md:flex-row justify-center items-center space-y-3 md:space-y-0 md:space-x-8 text-gray-600">
+                <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Ch%C3%A1%20de%20Cozinha%20-%20Kalebe%20%26%20Larissa&dates=20250903T003000Z/20250903T033000Z&details=Ch%C3%A1%20de%20Cozinha%20de%20Kalebe%20%26%20Larissa.&location=Jundia%C3%AD%2C%20SP" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-pink-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-700" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                    </svg>
+                    <span>30 de Novembro de 2025</span>
+                </a>
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-700" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 10.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    <span>às 13:30</span>
+                </div>
+                <a href="https://maps.app.goo.gl/9VVqtqYaCt18rQQT9" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-pink-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-pink-700" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Buffet Residencial Jasmim - Jundiaí, SP</span>
+                </a>
+            </div>
+            
+            <br/><p id="header-text" class="text-gray-500 max-w-2xl mx-auto"></p>
+            <p class="mt-4 text-sm text-gray-500 max-w-2xl mx-auto italic">Os preços e links são apenas sugestões. Sinta-se à vontade para comprar em sua loja de preferência!</p>
+        </div>
+    </header>
+
+    <!-- Lista de Presentes -->
+    <main id="gift-list-container" class="container mx-auto px-6 py-12 hidden">
+        <div id="gift-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Os cards de presentes serão inseridos aqui pelo JavaScript -->
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center py-6 text-gray-500">
+        <p>Feito com ❤️</p>
+        <div class="mt-4">
+            <button onclick="showModal('password-modal')" class="text-xs text-gray-400 hover:text-pink-600 transition-colors">
+                Acesso do Anfitrião
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal de Confirmação de Presença (RSVP) -->
+    <div id="rsvp-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Bem-vindo(a)!</h2>
+            <p class="mb-6 text-gray-600">Para continuar, por favor, digite seu nome e confirme sua presença (ou ausência) no evento.</p>
+            <div>
+                <label for="rsvp-guest-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu nome completo</label>
+                <input type="text" id="rsvp-guest-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite seu nome aqui">
+                <p id="rsvp-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu nome.</p>
+            </div>
+            <div class="mt-8 space-y-3">
+                <button onclick="handleRSVP(true)" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Confirmar Presença e Ver Presentes</button>
+                <button onclick="handleRSVP(false)" class="w-full px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não poderei ir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Reserva -->
+    <div id="reserve-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Confirmar Reserva</h2>
+            <p class="mb-6 text-gray-600">Você confirma a reserva do item: <strong id="modal-gift-name" class="text-pink-700"></strong>?</p>
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="hideModal('reserve-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
+                <button onclick="confirmReservation()" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Sim, Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Cancelar Reserva -->
+    <div id="cancel-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Cancelar Reserva</h2>
+            <p class="mb-6 text-gray-600">Você tem certeza que deseja cancelar a reserva do item: <strong id="cancel-modal-gift-name" class="text-pink-700"></strong>?</p>
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="hideModal('cancel-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Voltar</button>
+                <button onclick="confirmCancellation()" class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md">Sim, Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Lista de Presenteadores -->
+    <div id="givers-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Presentes Reservados</h2>
+            <div id="givers-list-content" class="text-gray-700 max-h-96 overflow-y-auto">
+                <!-- A lista será inserida aqui -->
+            </div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="hideModal('givers-modal')" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Senha do Anfitrião -->
+    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Acesso Restrito</h2>
+            <p class="mb-6 text-gray-600">Por favor, digite a senha de anfitrião para ver a lista.</p>
+            <div>
+                <label for="host-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="host-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite a senha">
+                <p id="password-error-message" class="text-red-500 text-sm mt-1 hidden">Senha incorreta. Tente novamente.</p>
+            </div>
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="hideModal('password-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
+                <button onclick="checkPassword()" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Acessar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- INÍCIO DA ÁREA DE EDIÇÃO ---
+        // 1. Altere a senha do anfitrião aqui
+        const hostPassword = '*chadecozinha';
+
+        // 2. Adicione, remova ou modifique os presentes nesta lista.
+        const gifts = [
+            { id: 1, name: 'Kit Amassador de Batatas e Alho', description: 'Kit Amassador de Batata + Espremedor de Alho, para amassar junto com o estresse do dia a dia', price: 'R$ 34,70', imageUrl: 'https://m.media-amazon.com/images/I/61Zw26eAM4L._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0D47TKHW9/ref=ox_sc_act_title_21?smid=A3E059628WSBM3&psc=1', reservedBy: null },
+            { id: 2, name: 'Kit Moedor de Sal e Pimenta', description: 'Para temperar a salada e a vida', price: 'R$ 59,31', imageUrl: 'https://m.media-amazon.com/images/I/512edo3meoL._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0F29WHJ3V/ref=ox_sc_act_image_20?smid=A26VN0P2VU8G0L&psc=1', reservedBy: null },
+            { id: 3, name: 'Kit de Medidores', description: 'Medidores porque sou míope e meu olhômetro não é bom', price: 'R$ 35,90', imageUrl: 'https://m.media-amazon.com/images/I/517ZTa4xd4L._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0F8X6PT8N/ref=ox_sc_act_image_19?smid=A1ETBYD5EZS253&th=1', reservedBy: null },
+            { id: 4, name: 'Cortador de Pizza', description: 'Cortador de Pizza Vermelho - Para as melhores noites do mês', price: 'R$ 20,00', imageUrl: 'https://m.media-amazon.com/images/I/71LdQyf7QTL._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B09GZY7C3B/ref=ox_sc_act_image_18?smid=A1ZZFT5FULY4LN&psc=1', reservedBy: null },
+            { id: 5, name: 'Escorredor de Macarrão', description: 'Para aquele almoço rápido', price: 'R$ 39,99', imageUrl: 'https://m.media-amazon.com/images/I/710nATvbutS._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B076TGTJ71/ref=ox_sc_act_image_17?smid=ATIQHSLRXJXK7&psc=1', reservedBy: null },
+            { id: 6, name: 'Descansos de Panela', description: 'Para não queimar a toalha de mesa', price: 'R$ 78,99', imageUrl: 'https://m.media-amazon.com/images/I/61Z3r+TEiyL._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0DYF1YSW5/ref=ox_sc_act_image_13?smid=A24RQ57A9C01KE&psc=1', reservedBy: null },
+            { id: 7, name: 'Cuscuzeiro', description: 'Para aquele café da manhã &#39diliça&#39', price: 'R$ 67,24', imageUrl: 'https://m.media-amazon.com/images/I/516SLWhXbFL._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B085CFVY39/ref=ox_sc_act_image_12?smid=A3164TD9UDBTG8&psc=1', reservedBy: null },
+            { id: 8, name: 'Tábua de Carnes', description: 'Para você já se convidar para o churrasco', price: 'R$ 88,90', imageUrl: 'https://m.media-amazon.com/images/I/71o4bd41s5L._AC_SL1500_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0C83H628J/ref=ox_sc_act_image_14?smid=A3T2TQAB0ZI3NC&psc=1', reservedBy: null },
+            { id: 9, name: 'Chaleira Elétrica', description: 'Para a praticidade no dia a dia', price: 'R$ 272,07', imageUrl: 'https://m.media-amazon.com/images/I/413Qbn5cvJL._AC_SL1000_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B08NXMMD94/ref=ox_sc_act_image_6?smid=A1ZZFT5FULY4LN&th=1', reservedBy: null },
+            { id: 10, name: 'Porta Frios', description: 'Pra famosa dupla: presunto e queijo', price: 'R$ 49,70', imageUrl: 'https://m.media-amazon.com/images/I/51K7l2S3+CL._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0CQ4ZFLLF/ref=ox_sc_act_image_3?smid=A1O7UHFBN0LNLY&psc=1', reservedBy: null },
+            { id: 11, name: 'Porta Guardanapo de Cerâmica', description: 'Apenas um porta guadanapo bonitinho', price: 'R$ 35,99', imageUrl: 'https://m.media-amazon.com/images/I/619oXljSJGL._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0FCQ9CF6C/ref=ox_sc_act_image_2?smid=A2EP5EALWX03LX&psc=1', reservedBy: null },
+            { id: 12, name: 'Conjunto de 3 Peneiras', description: 'Não duvide do potencial deles na cozinha', price: 'R$ 37,89', imageUrl: 'https://m.media-amazon.com/images/I/51E5IJI0JQL._AC_SL1300_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0D4JMMJ9V/ref=ox_sc_act_image_11?smid=A3AVK9UZYODRJ6&psc=1', reservedBy: null },
+            { id: 13, name: 'Cesta de Pães', description: 'Pra elevar o nível do café da manhã (juro que vou lembrar de usar)', price: 'R$ 21,99', imageUrl: 'https://m.media-amazon.com/images/I/61GlCp+hnfL._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0B5JPMV72/ref=ox_sc_act_image_10?smid=A1ZZFT5FULY4LN&th=1', reservedBy: null },
+            { id: 14, name: 'Bandeja de Café da Manhã', description: 'Para datas e momentos especiais', price: 'R$ 130,88', imageUrl: 'https://i.pinimg.com/736x/8e/d2/57/8ed257469c26b1a962d80e6f0d0344d5.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0DXCG7QYT/ref=ox_sc_act_image_8?smid=A2HWZKQHUKXBK4&psc=1', reservedBy: null },
+            { id: 15, name: 'Açucareiro', description: 'Para adoçar a vida', price: 'R$ 47,79', imageUrl: 'https://m.media-amazon.com/images/I/414ibz6lXBL._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0D5K44ZKW/ref=ox_sc_act_image_15?smid=A1ZZFT5FULY4LN&th=1', reservedBy: null },
+            { id: 16, name: 'Bule de Porcelana', description: 'Para me sentir em: &#39A Bela e a Fera&#39', price: 'R$ 139,90', imageUrl: 'https://m.media-amazon.com/images/I/41HaBMV2kUL._AC_SL1000_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0D5K5KQCH/ref=ox_sc_act_image_7?smid=A339ZLNDYQ53LG&psc=1', reservedBy: null },
+            { id: 17, name: 'Leiteira', description: 'Para quando vocês quiserem tomar um cafézinho em casa', price: 'R$ 57,90', imageUrl: 'https://m.media-amazon.com/images/I/3138T+szGlL._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B09T1RHC5Q/ref=ox_sc_act_image_4?smid=A3H33HE5P49PL0&th=1', reservedBy: null },
+            { id: 18, name: 'Conjunto 6 Xícaras', description: 'Para quando vocês quiserem tomar um cafézinho em casa', price: 'R$ 252,90', imageUrl: 'https://m.media-amazon.com/images/I/41P0aAsANgL._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/WOLFF-Conjunto-X%C3%ADcaras-Porcelana-Maldivas/dp/B0D4WCLSPN/ref=sr_1_53?crid=2YW7OKTT18AWQ&dib=eyJ2IjoiMSJ9.yv60QxalwulRmFy_S6ENccnjOfYgCYFQmENXg3-Q0WTveWMUant320Mb3Pq4qBVok4pGlTUmCXpFrfhDAagTyneqLTw2ywOrlYPcBZEt6076I_iy3V60IAhp7EXzNd4Rf5u_29rHiMacLIgtngea_QflUMdtPXEUQ8xtZuc_Yqwyw6vWmGkTxjdvMhdPMe6eqBK8Sim2JZ2yIfe23YgZeNCswp-oAc5XZoY9JRhntiV4Mlgj_NTt9shR8XXrjBy4q3QwddvIviOUknDykvypJsYw5I3x5cuLlA3GIpFJrHk.BGJbluP3kNpkbu84YoLbO2KdJ4fGHKlFAikfmIQAbpA&dib_tag=se&keywords=wolff+porcelana&qid=1756846696&sprefix=wolff+por%2Caps%2C267&sr=8-53&ufe=app_do%3Aamzn1.fos.fcd6d665-32ba-4479-9f21-b774e276a678', reservedBy: null },
+            { id: 19, name: 'Forma de Cupcakes', description: 'Para fazer cupcakes e me sentir no Bake off Brasil', price: 'R$ 34,99', imageUrl: 'https://m.media-amazon.com/images/I/41--i94tq5L._AC_.jpg', purchaseLink: 'https://www.amazon.com.br/Assadeira-Antiaderente-Cupcakes-Cavidades-Silicone/dp/B08728QMNJ/ref=sr_1_8?crid=2YTIVAV520VIE&dib=eyJ2IjoiMSJ9.zVBAo60wpnc43P6Z3Trns5y1HhBxnbvc3hX2lw-zIHt4OACXbKhLyosSAmobb1igAypwWEAVjptnXLHE7eZsbF8X0htLQ0rwLkPYFY8fVA7FqogMJcB8SZpJV6xFOoMt8gcaX7_WgMIvtcgtmyfFk5p2s2IbdOHxgywBnIDarK9KkC2uVCfc7_ip5UPycRK1hpbcpqSWy6xVzu-QFkgGegwjpaIK1_rETI2UoQy_z3UfqAuQm9oCfCnr12sCVeuJJY5n4hMrvZzdFdETmvcyifsk85G-wjU3xXFtC1Hv8Pc.MtK23cbPkKHKHHMHyc-oVDheu5yalkOx1CINm9D80iw&dib_tag=se&keywords=forma+para+cupcake&qid=1756864919&sprefix=formas+para+c%2Caps%2C251&sr=8-8', reservedBy: null },
+            { id: 20, name: 'Jogo de Pegadores', description: 'Kit Cozinha Pegador Salada/Gelo/Frios/Massas', price: 'R$ 23,17', imageUrl: 'https://m.media-amazon.com/images/I/616OS9wb6OL._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/Cozinha-Pegador-Salada-Frios-Massas/dp/B08YPB5FNN/ref=sr_1_12?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2MNILMYXLD45K&dib=eyJ2IjoiMSJ9.y_KMZFkrapWLfSWhlqs63ff5Q8XzCOQKy0i16ASae5ujBC__B5GbloD83DINSVMOeI-ZaVUg7kha1K7tDp441aNv8J0AgON3RNQyjNfek8-AVXA7Am-3GWYFdhfO5r1ssOHC37UyqHxSkPk4ceKXl6w4i8ItF7QWCX6To1uKNNKuxhVFh-XsTKrO-WbZBbbIDZDGlKmiZFwmjBuKBtJIQnsQktEtdZBx8a-NFYy2rxSLJ1ibxOrF2b-4LLV215BrqUaT02vQwQ3b3law3BA_Y6bz9mNI7WD9DIxrowHBhBw._LVG5UQ58B0ZyHNPp1bg4zOW5nq6wTj8QhI1dnRe7SE&dib_tag=se&keywords=jogo+de+pegadores&qid=1756865025&sprefix=jogo+de+pegadores%2Caps%2C365&sr=8-12', reservedBy: null },
+            { id: 21, name: 'Assadeiras Antiaderente Retangulares', description: 'Assadeiras Antiaderente Cerâmica, para me sentir no MasterChef', price: 'R$ 194,60', imageUrl: 'https://m.media-amazon.com/images/I/714K8SpkXQL._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/Assadeiras-Antiaderente-Cer%C3%A2mica-Marble-Duralar/dp/B0DPGMTD5X/ref=sr_1_6?crid=2S7Z9QSSNK5T1&dib=eyJ2IjoiMSJ9.60iDUClzGeu3bx3CiVlR5TlIYRPbu4YcR9OMFwE2UnMXA_slSYvG-ivQudUax5uCWpGxRkqy9pbC_KTGHnF43on2dLjrN7rL1wXoijT1sGFZRjLx1m-jfy9aoZ1bu3NmM2BRKd8AUVZ8oxwCil0e8PFyRIthOjXcJ0SlIVG6SbkzAuasUd_ZEhYQS7JmFmqYLAMNHc1665SUXGHJLgRt_Nw6sg6HxuZzvMtQmjPB4ZmuJmgFJ0IBW_GXkVIx5nFPU-z7K_Qxu7b4j_nyozGGBEWjfMlCW8D0RN90W8TSees.ztQAB5kcaOYhzii20i05U6qOARBc_KSNTtDxgzSEiiw&dib_tag=se&keywords=assadeira+antiaderente+ceramica&qid=1756865571&sprefix=assadeira+antiaderente+%2Caps%2C468&sr=8-6&ufe=app_do%3Aamzn1.fos.fcd6d665-32ba-4479-9f21-b774e276a678', reservedBy: null },
+            { id: 22, name: 'Frigideira Antiaderente', description: 'Pra fritar um zóio', price: 'R$ 98,90', imageUrl: 'https://m.media-amazon.com/images/I/61zQBC+MUDL._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/Frigideira-Antiaderente-Revestimento-Cer%C3%A2mica-Revestida/dp/B0F85LH87T/ref=sr_1_3_sspa?crid=XLHG3JETL80D&dib=eyJ2IjoiMSJ9.TX9HWb2pUeLdUEuWURhsjok1kHWQggHB7Am2-yHtXAi6zGzgOv4k1M7krDt8A4IR7JPnz1ym9ZDVNlGhkgm4kRY3uhMI-aVmfhG_vEnOszUUvRnPvkbvb8pc2Xe4VsEBqQtt85aOv8XrS1M2O0Ig-tiEB5N9UiAPdp-TNpNT2lDbjevl40-cQfnyule4F2zT7dhNK5eEMkFnSCLQUtzu6N1bS0BVW6fv9tfXJHEmuUKsBaKwVXia9zHkes5xHiBTiSc296MEfzznL7rb22TK5lP1FjwTZ4hDBEkPnOO4aTI.7DEdD74P60a_yXH4wpa1CSWZFuA2j4P3wldM24wu7P0&dib_tag=se&keywords=frigideira+ceramica&qid=1756866941&sprefix=frigideira+%2Caps%2C300&sr=8-3-spons&ufe=app_do%3Aamzn1.fos.6d798eae-cadf-45de-946a-f477d47705b9&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1', reservedBy: null },
+            { id: 23, name: 'Jogo Americano', description: 'Para o almoço de domingo', price: 'R$ 51,00', imageUrl: 'https://m.media-amazon.com/images/I/71+bA3sCv2L._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/Lugares-Americanos-Diversas-Artesanal-Colorido/dp/B0DKPBXJ41/ref=sr_1_15?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2W26PKKQK0H7H&dib=eyJ2IjoiMSJ9.vhKjO-sWAc6iMhXWGjtlgj9MftJfL1_29k8mgeW5sQEjQf8rfnJcBCLdXQXIWxoLv_qdN4OqwMM_p2pm79XwmbfyHzjVMKFwwWMLiont0oici0i437FmxMXMLqDE5Kk1NmLsbWNmYxeEKrfLFh7GxNX2OfsYvnuHxe_c4TcIyE1IdC9kClgCmiYlxz0L59-_BBaTE-pRyJT479Y8GRj1uPE89Ki3xfnzO1JspBV7FA07VsbyruwlyIyRNpqsoOrwYmmKnOGFI6Cn8yCdtgydg1VR1qwAuek1NyP9POXO2dI.TOjJogFL0Mwq9mvwTJf_t_zuo1gtLNfNp_bCr8sbExI&dib_tag=se&keywords=jogo%2Bamericano&qid=1756867024&sprefix=jogo%2Bamericano%2Caps%2C435&sr=8-15&ufe=app_do%3Aamzn1.fos.6d798eae-cadf-45de-946a-f477d47705b9&th=1', reservedBy: null },
+            { id: 24, name: 'Mantegueira', description: 'Manteigueira de Porcelana com espatula', price: 'R$ 69,90', imageUrl: 'https://m.media-amazon.com/images/I/51xEuTBKZKL._AC_SX679_.jpg', purchaseLink: 'https://www.amazon.com.br/Ha%C3%BCskraf-Manteigueira-Porcelana-espatula-natural/dp/B0D9MKCKQ7/ref=sr_1_14?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3KFPW008U8TUK&dib=eyJ2IjoiMSJ9.X3Gn8aAC-AG6-S7PnpN9kLhvjbOjGSLRPaqK7kvzUyadZfkIEqa8N9I82vaO7xFfXkG4Hahr23GruXwxD52VOooKuSKu-jTsbCnKStGkLPICxRYFk6qytB2WaH7GWOfDfBl8RS3DsFCRT8cXTLY0pLVp0RAj0BID7RtlqMytXZ5qF-ZiL3tU1AePRXc-MXhSB3T0wjEh1-TqPHy2WbzwEu3eDj8XKD_HTiFY9FfkyVuNRgC8b_5ivlr1ElliF-7g3wbPuSxRVwLzSqbaymEGtGbRtjoh2pOzEB2SX75jy2c.2cmhb7-byrh_LNXjsXR2zLiwDnXp-J9K4BEwhx3lzbc&dib_tag=se&keywords=mantegueira&qid=1756867098&sprefix=mantegueira%2Caps%2C383&sr=8-14&ufe=app_do%3Aamzn1.fos.6d798eae-cadf-45de-946a-f477d47705b9', reservedBy: null },
+            { id: 25, name: 'Jogo de Panelas', description: 'Para honrar todo treinamento na cozinha morando sozinhos', price: 'R$ 414,99', imageUrl: 'https://m.media-amazon.com/images/I/519gcWvUlNL._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/Brinox-Panelas-Antiaderente-Ceramic-Indu%C3%A7%C3%A3o/dp/B0DDZJ18T2/ref=sr_1_7?crid=3RTUHYE340PBH&dib=eyJ2IjoiMSJ9.GSjhaY8WOWGYGhdurVO-UW-RPcefBmDNjqkeJqxSBPOA_-iufqIjE-okccvj-xSIge25jDdLieyh-73BWtczZakPX9F2NoDWaoIaRWEgJfCnL83pZ9oJsImHAlQLCLPtQolWchjn57Sl71pWZJ-Jo3-eF5QnuItO2BT5jrAv4mzTI5_613mU3EMQO9rgQYIfdME7TPYR1KhqqQo-QVeYRYjK8tuCwINFwnsieJcFFDBa_H3R-6j-SwmslNXQ-wgWtfwLQkWwW3CHyXaWFYV1MTic_j4j5alfoQsCDPxL8g4.dBxc-3J1VplAmJZ99HLZO6ZpkHSkD2txdv5nS_5qKE0&dib_tag=se&keywords=jogo+de+panelas+ceramica&qid=1756867143&sprefix=Jogo+de+panelas+%2Caps%2C260&sr=8-7&ufe=app_do%3Aamzn1.fos.e05b01e0-91a7-477e-a514-15a32325a6d6', reservedBy: null },
+            { id: 26, name: 'Ralador', description: 'Ralador 6 Faces 20cm', price: 'R$ 39,99', imageUrl: 'https://m.media-amazon.com/images/I/51F6Q1jPw-L._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/Ralador-Pratic-Brinox-2204-328/dp/B08KLW44S7/ref=sr_1_9?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2X97NA8VRM4B&dib=eyJ2IjoiMSJ9.U11kdFk3awohKU6v8EiooFTTo-J2GNCXS59YQMerkvFL4v1UQYJNnZYTAqVyEOp_DVr7VF5pqu9MGHtnWYRkCpGSbEjGH3KagmIpqSqB3gUL4_owyMu9sB_TgCLL6sKPSVFB8c6fO7jxnRE-X9eB7-iVNKwIN4nPEDEwlJ0vQMEWxyCvbAa9FOmQN0ItvRBzQXBWb6tLwUeFPm9hMX086LddyMpArPr1IW1yujKBaF77PfehpHOos3ichkf3230t5WGnGv2cvgv8IvRDpIMJoBj7Mov3Yuc39UY0hwTg98E.HXnW8APTTuuIjDjxfa1dB0Tzdzdl83CJUcBjvIraB0Y&dib_tag=se&keywords=ralador&qid=1756867353&sprefix=ralador%2Caps%2C291&sr=8-9', reservedBy: null },
+            { id: 27, name: 'Jogo de Taças de Vinho', description: 'Para os melhores brindes', price: 'R$ 64,90', imageUrl: 'https://m.media-amazon.com/images/I/51fsAYstn4L._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/Ta%C3%A7as-Vinho-Drink-465ml-Altura/dp/B0F9FRQS6Q/ref=sr_1_2_sspa?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=37U5TERGHELW7&dib=eyJ2IjoiMSJ9.xv8XEltXmWO0Tp3kSViS2Q6MmP6wc2iWP1PAjAgbqgmoBHSg0KPR4cmjR8V5hvsqVsRIqdN1Vh8tLbVC7T1DvoFFm4hyIMDVyBBvNda4nJiu80NPklS860HLg6zBrD7uPh-UdBFudwuNvNapt9OcxZKIJ-iThg7bq5jNbG-EWvmmQp8A-cJxfVXBLojWeQrm1fH_4rINlE_ZwBkWDRtBxCheK1220IstsX_vE5TZ6IY8SjSiTfKd8_te9_m7dACMYMLD8U_lPkGGFNQY5HZRLQiJzGHwB85QAbbOKx7UqEo.Kq68hpBf47NLr6S4pfBK3-hV2On0ojIajyHbzWDYlmw&dib_tag=se&keywords=jogo+de+ta%C3%A7as+de+vinho&qid=1756867444&sprefix=jogo+de+ta%C3%A7as+de+vinho%2Caps%2C247&sr=8-2-spons&ufe=app_do%3Aamzn1.fos.6d798eae-cadf-45de-946a-f477d47705b9&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1', reservedBy: null },
+            { id: 28, name: 'Jogo de Facas Tramontina', description: 'Cuidado, risco de acidente na cozinha (brincadeira)', price: 'R$ 182,32', imageUrl: 'https://m.media-amazon.com/images/I/61RqbpPpt5L._AC_SY300_SX300_QL70_ML2_.jpg', purchaseLink: 'https://www.amazon.com.br/Facas-Pe%C3%A7as-Tramontina-Plenus-23498015/dp/B0772XQ7XQ/ref=sr_1_9_mod_primary_new?crid=20LR9ACFK7VLR&dib=eyJ2IjoiMSJ9.GShBFrX8XLSsLVI20nVgnfWr7C4N65OIhv62cpdLNz9rLF_U37XhLycdTG-X64TegJ9MVMF1ieKdCgRiNwrY0NuKPkIQNV4funC8OjLCpFIEc0ScHWfSTq4gh3ikTxGXy8SqZbJH3EJ6ACp4Yylt4dAl7igemNNk9q2aysQs-cG836OCCOK9dv2Wxc_iPY2wQbPKiOPiogZ4lpsvaTnGPuZN0-Ldzg45nc0zlltPGkJrXL7lWbDiWAqSBskuAjNOzQma730Z7buRYjTkQnmRmi73v0csZVZbGoOIGuFOR1M.VjfdGHqU_im4CvCc7xUt7nyEPKU1vrba05bOm1qh22A&dib_tag=se&keywords=jogo%2Bde%2Bfacas%2Btramontina&qid=1756867502&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sprefix=jogo%2Bde%2Bfacas%2Caps%2C314&sr=8-9&th=1', reservedBy: null },
+            { id: 29, name: 'Jogo de Potes Herméticos', description: 'Para as marmitas da semana', price: 'R$ 116,30', imageUrl: 'https://m.media-amazon.com/images/I/61APcshc2WL._AC_SX569_.jpg', purchaseLink: 'https://www.amazon.com.br/Potes-Vidro-Retangular-Tampa-Herm%C3%A9tica/dp/B08CPY6GYR/ref=pd_ci_mcx_mh_mcx_views_2_image?pd_rd_w=TKufF&content-id=amzn1.sym.191bd9ff-f992-4b16-98ea-c0445c36dd16%3Aamzn1.symc.40e6a10e-cbc4-4fa5-81e3-4435ff64d03b&pf_rd_p=191bd9ff-f992-4b16-98ea-c0445c36dd16&pf_rd_r=M2BZETA0HA05BS8BAG88&pd_rd_wg=Tj4HI&pd_rd_r=94634531-fd93-4525-8c42-21da88b065d2&pd_rd_i=B08CPY6GYR', reservedBy: null },
+            { id: 30, name: 'Potes de Vidro Herméticos', description: 'Ideais para conservar alimentos e organizar outros itens com praticidade', price: 'R$ 209,90', imageUrl: 'https://m.media-amazon.com/images/I/71SfEQ-c1ML._AC_SX522_.jpg', purchaseLink: 'https://www.amazon.com.br/gp/product/B0D2432MMN/ref=ox_sc_saved_image_1?smid=AUXVE2HSGO99G&th=1', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null },
+            //{ id: 22, name: 'Churrasqueira Elétrica', description: 'Perfeita para apartamentos e áreas pequenas.', price: 'R$ 220,00', imageUrl: 'https://placehold.co/600x400/f472b6/ffffff?text=Churrasqueira', purchaseLink: '#', reservedBy: null }
+        ];
+        // --- FIM DA ÁREA DE EDIÇÃO ---
+
+        const giftListContainer = document.getElementById('gift-list');
+        const giftListMainContainer = document.getElementById('gift-list-container');
+        const rsvpModal = document.getElementById('rsvp-modal');
+        const reserveModal = document.getElementById('reserve-modal');
+        const cancelModal = document.getElementById('cancel-modal');
+        const giversModal = document.getElementById('givers-modal');
+        const passwordModal = document.getElementById('password-modal');
+        const modalGiftName = document.getElementById('modal-gift-name');
+        const cancelModalGiftName = document.getElementById('cancel-modal-gift-name');
+        const rsvpGuestNameInput = document.getElementById('rsvp-guest-name');
+        const rsvpErrorMessage = document.getElementById('rsvp-error-message');
+        const hostPasswordInput = document.getElementById('host-password');
+        const passwordErrorMessage = document.getElementById('password-error-message');
+        const giversListContent = document.getElementById('givers-list-content');
+        const headerText = document.getElementById('header-text');
+
+        let currentGiftId = null;
+        let guestInfo = null;
+
+        function loadGifts() {
+            const storedGifts = localStorage.getItem('bridalShowerGifts');
+            return storedGifts ? JSON.parse(storedGifts) : gifts;
+        }
+
+        function saveGifts(currentGifts) {
+            localStorage.setItem('bridalShowerGifts', JSON.stringify(currentGifts));
+        }
+
+        let appGifts = loadGifts();
+
+        function renderGifts() {
+            giftListContainer.innerHTML = '';
+            appGifts.forEach(gift => {
+                const isReserved = gift.reservedBy;
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col ${isReserved ? 'opacity-60' : ''}`;
+                
+                let buttonHtml;
+                if (isReserved) {
+                    if (guestInfo && gift.reservedBy.name === guestInfo.name) {
+                        buttonHtml = `<div class="p-6"><button onclick="showModal('cancel-modal', ${gift.id})" class="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Cancelar Reserva</button></div>`;
+                    } else {
+                        buttonHtml = `<div class="bg-green-100 text-green-800 text-center p-6"><p class="font-bold">Este presente já foi reservado!</p></div>`;
+                    }
+                } else {
+                    buttonHtml = `<div class="p-6"><button onclick="showModal('reserve-modal', ${gift.id})" class="w-full bg-pink-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-pink-700 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">Quero dar este presente!</button></div>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="relative"><img src="${gift.imageUrl}" alt="${gift.name}" class="w-full aspect-square object-cover">${isReserved ? '<div class="absolute inset-0 bg-black bg-opacity-30"></div>' : ''}</div>
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-xl font-bold text-gray-800">${gift.name}</h3>
+                        <p class="text-gray-600 mt-2 flex-grow">${gift.description}</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-2xl font-bold text-pink-700">${gift.price}</span>
+                            <a href="${gift.purchaseLink}" target="_blank" class="text-pink-600 hover:text-pink-800 font-semibold ${isReserved ? 'pointer-events-none' : ''}">Ver loja</a>
+                        </div>
+                    </div>
+                    ${buttonHtml}`;
+                giftListContainer.appendChild(card);
+            });
+        }
+
+        function showModal(modalId, giftId = null) {
+            const modal = document.getElementById(modalId);
+            if (giftId) {
+                const gift = appGifts.find(g => g.id === giftId);
+                if (gift) {
+                    currentGiftId = giftId;
+                    if (modalId === 'reserve-modal') modalGiftName.textContent = gift.name;
+                    if (modalId === 'cancel-modal') cancelModalGiftName.textContent = gift.name;
+                }
+            }
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.querySelector('div.modal-enter').classList.add('modal-enter-active'), 10);
+            if (modalId === 'rsvp-modal') rsvpGuestNameInput.focus();
+            if (modalId === 'password-modal') hostPasswordInput.focus();
+        };
+
+        function hideModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const modalContent = modal.querySelector('div.modal-enter');
+            modalContent.classList.remove('modal-enter-active');
+            modalContent.classList.add('modal-exit-active');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modalContent.classList.remove('modal-exit-active');
+                 if (modalId === 'password-modal') {
+                    hostPasswordInput.value = '';
+                    passwordErrorMessage.classList.add('hidden');
+                    hostPasswordInput.classList.remove('border-red-500');
+                }
+            }, 300);
+        };
+
+        window.handleRSVP = (isAttending) => {
+            const name = rsvpGuestNameInput.value.trim();
+            if (!name) {
+                rsvpErrorMessage.classList.remove('hidden');
+                rsvpGuestNameInput.classList.add('border-red-500');
+                return;
+            }
+            const info = { name: name, attending: isAttending };
+            localStorage.setItem('bridalShowerGuestInfo', JSON.stringify(info));
+            hideModal('rsvp-modal');
+            initializePage();
+        };
+
+        window.checkPassword = () => {
+            const enteredPassword = hostPasswordInput.value;
+            if (enteredPassword === hostPassword) {
+                hideModal('password-modal');
+                showGiversList();
+            } else {
+                passwordErrorMessage.classList.remove('hidden');
+                hostPasswordInput.classList.add('border-red-500');
+            }
+        };
+
+        window.confirmReservation = () => {
+            if (!guestInfo) {
+                alert('Ocorreu um erro. Por favor, recarregue a página.');
+                return;
+            }
+            const giftIndex = appGifts.findIndex(g => g.id === currentGiftId);
+            if (giftIndex !== -1) {
+                appGifts[giftIndex].reservedBy = guestInfo;
+                saveGifts(appGifts);
+                renderGifts();
+            }
+            hideModal('reserve-modal');
+        };
+
+        window.confirmCancellation = () => {
+            const giftIndex = appGifts.findIndex(g => g.id === currentGiftId);
+            if (giftIndex !== -1) {
+                appGifts[giftIndex].reservedBy = null;
+                saveGifts(appGifts);
+                renderGifts();
+            }
+            hideModal('cancel-modal');
+        };
+
+        window.showGiversList = () => {
+            const currentGifts = loadGifts();
+            const reservedGifts = currentGifts.filter(gift => gift.reservedBy);
+
+            if (reservedGifts.length === 0) {
+                giversListContent.innerHTML = '<p>Nenhum presente foi reservado ainda.</p>';
+            } else {
+                let listHtml = '<ul class="space-y-4">';
+                reservedGifts.forEach(gift => {
+                    const rsvpStatus = gift.reservedBy.attending 
+                        ? '<span class="text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded-full">PRESENÇA CONFIRMADA</span>'
+                        : '<span class="text-xs font-semibold text-orange-700 bg-orange-100 px-2 py-1 rounded-full">NÃO PODERÁ COMPARECER</span>';
+
+                    listHtml += `
+                        <li class="border-b pb-3">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-gray-800">${gift.name}</span><br>
+                                    <span class="text-sm text-gray-500">Reservado por:</span> <span class="text-pink-700">${gift.reservedBy.name}</span>
+                                </div>
+                                <div class="mt-1">${rsvpStatus}</div>
+                            </div>
+                        </li>`;
+                });
+                listHtml += '</ul>';
+                giversListContent.innerHTML = listHtml;
+            }
+
+            showModal('givers-modal');
+        };
+
+        function initializePage() {
+            const storedGuestInfo = localStorage.getItem('bridalShowerGuestInfo');
+            if (storedGuestInfo) {
+                guestInfo = JSON.parse(storedGuestInfo);
+                headerText.textContent = `Olá, ${guestInfo.name}! Sua presença é o maior presente! Mas, se desejar nos presentear, preparamos esta lista com muito carinho. Para reservar um item, basta clicar em "Quero dar este presente!".`;
+                giftListMainContainer.classList.remove('hidden');
+                renderGifts();
+            } else {
+                headerText.textContent = `Queridos amigos e familiares, sua presença é o maior presente! Para continuar, por favor, confirme sua presença.`;
+                showModal('rsvp-modal');
+            }
+        }
+        
+        [rsvpModal, reserveModal, giversModal, passwordModal, cancelModal].forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (event) => {
+                    // Impede que o modal feche ao clicar dentro do conteúdo, exceto o de rsvp
+                    if (event.target === modal && modal.id !== 'rsvp-modal') {
+                        hideModal(modal.id);
+                    }
+                });
+            }
+        });
+        
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                if (!reserveModal.classList.contains('hidden')) hideModal('reserve-modal');
+                if (!cancelModal.classList.contains('hidden')) hideModal('cancel-modal');
+                if (!giversModal.classList.contains('hidden')) hideModal('givers-modal');
+                if (!passwordModal.classList.contains('hidden')) hideModal('password-modal');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+
+</body>
+</html>
+
