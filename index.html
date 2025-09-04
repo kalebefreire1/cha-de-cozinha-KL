@@ -83,59 +83,176 @@
         </div>
         
         <div id="confirm-only-button-container" class="text-center mt-12 hidden">
-            <button onclick="confirmPresenceOnly()" class="bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors shadow-md">Apenas Confirmar Presença</button>
+            <button onclick="window.app.confirmPresenceOnly()" class="bg-green-600 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-700 transition-colors shadow-md">Apenas Confirmar Presença</button>
             <p class="text-xs text-gray-500 mt-2">Você pode voltar mais tarde para escolher um presente.</p>
         </div>
     </main>
     
-    <!-- Rodapé e Modais (sem alterações) -->
-    <footer class="text-center py-6 text-gray-500"><p>Feito com ❤️</p><div class="mt-4"><button onclick="showModal('password-modal')" class="text-xs text-gray-400 hover:text-pink-600 transition-colors">Acesso do Anfitrião</button></div></footer>
-    <div id="rsvp-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center"><h2 class="text-2xl font-bold mb-4 text-gray-800">Bem-vindo(a)!</h2><p class="mb-6 text-gray-600">Para continuar, por favor, digite seu nome e confirme sua presença (ou ausência) no evento.</p><div><label for="rsvp-guest-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu nome completo</label><input type="text" id="rsvp-guest-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite seu nome aqui"><p id="rsvp-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu nome.</p></div><div class="mt-8 space-y-3"><button onclick="handleRSVP(true)" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Confirmar Presença</button><button onclick="handleRSVP(false)" class="w-full px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não poderei ir, mas quero presentear</button></div></div></div>
-    <div id="companion-prompt-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center"><h2 class="text-2xl font-bold mb-4 text-gray-800">Acompanhantes</h2><p class="mb-8 text-gray-600">Você levará acompanhante(s) para o evento?</p><div class="flex justify-center space-x-4"><button onclick="handleCompanionPrompt(false)" class="px-8 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não</button><button onclick="handleCompanionPrompt(true)" class="px-8 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Sim</button></div></div></div>
-    <div id="companion-details-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center"><h2 class="text-2xl font-bold mb-4 text-gray-800">Dados dos Acompanhantes</h2><p id="companion-instructions" class="mb-6 text-gray-600">Por favor, preencha as informações de cada acompanhante para a lista da portaria.</p><div id="companion-list" class="text-left mb-4 text-sm text-gray-500 max-h-24 overflow-y-auto"></div><div><label for="companion-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nome completo do acompanhante</label><input type="text" id="companion-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite o nome completo"><p id="companion-name-error" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha o nome.</p></div><div class="mt-4"><label for="companion-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nº do Documento (RG ou CNH)</label><input type="text" id="companion-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números"><p id="companion-document-error" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha o documento.</p></div><div class="mt-8 flex flex-col sm:flex-row gap-3"><button onclick="addAnotherCompanion()" class="w-full px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors">Adicionar Outro</button><button onclick="finishCompanionRegistration()" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Finalizar e Continuar</button></div></div></div>
-    <div id="document-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center"><h2 class="text-2xl font-bold mb-4 text-gray-800">Seu Acesso ao Evento</h2><p class="mb-6 text-gray-600">Agora, para finalizar, informe o seu documento de identificação (RG ou CNH) para a lista da portaria.</p><div><label for="guest-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu Nº de Documento (RG ou CNH)</label><input type="text" id="guest-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números"><p id="document-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu documento.</p></div><div class="mt-8"><button onclick="saveDocument()" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Salvar e Ver Presentes</button></div></div></div>
-    <div id="reserve-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter"><h2 class="text-2xl font-bold mb-4 text-gray-800">Confirmar Reserva</h2><p class="mb-6 text-gray-600">Você confirma a reserva do item: <strong id="modal-gift-name" class="text-pink-700"></strong>?</p><div class="mt-8 flex justify-end space-x-4"><button onclick="hideModal('reserve-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button><button onclick="confirmReservation()" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Sim, Confirmar</button></div></div></div>
-    <div id="cancel-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter"><h2 class="text-2xl font-bold mb-4 text-gray-800">Cancelar Reserva</h2><p class="mb-6 text-gray-600">Você tem certeza que deseja cancelar a reserva do item: <strong id="cancel-modal-gift-name" class="text-pink-700"></strong>?</p><div class="mt-8 flex justify-end space-x-4"><button onclick="hideModal('cancel-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Voltar</button><button onclick="confirmCancellation()" class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md">Sim, Cancelar</button></div></div></div>
-    <div id="givers-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg mx-auto modal-enter"><h2 class="text-2xl font-bold mb-6 text-gray-800">Lista de Convidados e Presentes</h2><div id="givers-list-content" class="text-gray-700 max-h-96 overflow-y-auto"></div><div class="mt-8 flex justify-end"><button onclick="hideModal('givers-modal')" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors">Fechar</button></div></div></div>
-    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-auto modal-enter"><h2 class="text-2xl font-bold mb-4 text-gray-800">Acesso Restrito</h2><p class="mb-6 text-gray-600">Por favor, digite a senha de anfitrião para ver a lista.</p><div><label for="host-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label><input type="password" id="host-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite a senha"><p id="password-error-message" class="text-red-500 text-sm mt-1 hidden">Senha incorreta. Tente novamente.</p></div><div class="mt-8 flex justify-end space-x-4"><button onclick="hideModal('password-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button><button onclick="checkPassword()" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Acessar</button></div></div></div>
-    <div id="thank-you-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden"><div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-auto modal-enter text-center"><h2 class="text-2xl font-bold mb-4 text-pink-700">Obrigado!</h2><p class="mb-6 text-gray-600">Sua presença foi confirmada com sucesso! Agradecemos seu carinho. Se mudar de ideia sobre o presente, basta visitar esta página novamente.</p><div class="mt-8 flex justify-end"><button onclick="hideModal('thank-you-modal')" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors">Fechar</button></div></div></div>
+    <!-- Rodapé -->
+    <footer class="text-center py-6 text-gray-500">
+        <p>Feito com ❤️</p>
+        <div class="mt-4">
+            <button onclick="window.app.showModal('password-modal')" class="text-xs text-gray-400 hover:text-pink-600 transition-colors">
+                Acesso do Anfitrião
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modal de Confirmação de Presença (RSVP) -->
+    <div id="rsvp-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Bem-vindo(a)!</h2>
+            <p class="mb-6 text-gray-600">Para continuar, por favor, digite seu nome e confirme sua presença (ou ausência) no evento.</p>
+            <div>
+                <label for="rsvp-guest-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu nome completo</label>
+                <input type="text" id="rsvp-guest-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite seu nome aqui">
+                <p id="rsvp-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu nome.</p>
+            </div>
+            <div class="mt-8 space-y-3">
+                <button onclick="window.app.handleRSVP(true)" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Confirmar Presença</button>
+                <button onclick="window.app.handleRSVP(false)" class="w-full px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não poderei ir, mas quero presentear</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pergunta sobre Acompanhante -->
+    <div id="companion-prompt-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Acompanhantes</h2>
+            <p class="mb-8 text-gray-600">Você levará acompanhante(s) para o evento?</p>
+            <div class="flex justify-center space-x-4">
+                <button onclick="window.app.handleCompanionPrompt(false)" class="px-8 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-md">Não</button>
+                <button onclick="window.app.handleCompanionPrompt(true)" class="px-8 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Sim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Acompanhante -->
+    <div id="companion-details-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Dados dos Acompanhantes</h2>
+            <p id="companion-instructions" class="mb-6 text-gray-600">Por favor, preencha as informações de cada acompanhante para a lista da portaria.</p>
+            <div id="companion-list" class="text-left mb-4 text-sm text-gray-500 max-h-24 overflow-y-auto"></div>
+            <div>
+                <label for="companion-name" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nome completo do acompanhante</label>
+                <input type="text" id="companion-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite o nome completo">
+                <p id="companion-name-error" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha o nome.</p>
+            </div>
+            <div class="mt-4">
+                <label for="companion-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Nº do Documento (RG ou CNH)</label>
+                <input type="text" id="companion-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números">
+                <p id="companion-document-error" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha o documento.</p>
+            </div>
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <button onclick="window.app.addAnotherCompanion()" class="w-full px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors">Adicionar Outro</button>
+                <button onclick="window.app.finishCompanionRegistration()" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Finalizar e Continuar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro de Documento -->
+    <div id="document-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Seu Acesso ao Evento</h2>
+            <p class="mb-6 text-gray-600">Agora, para finalizar, informe o seu documento de identificação (RG ou CNH) para a lista da portaria.</p>
+            <div>
+                <label for="guest-document" class="block text-sm font-medium text-gray-700 mb-1 text-left">Seu Nº de Documento (RG ou CNH)</label>
+                <input type="text" id="guest-document" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Apenas números">
+                <p id="document-error-message" class="text-red-500 text-sm mt-1 hidden text-left">Por favor, preencha seu documento.</p>
+            </div>
+            <div class="mt-8">
+                <button onclick="window.app.saveDocument()" class="w-full px-6 py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Salvar e Ver Presentes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Reserva -->
+    <div id="reserve-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Confirmar Reserva</h2>
+            <p class="mb-6 text-gray-600">Você confirma a reserva do item: <strong id="modal-gift-name" class="text-pink-700"></strong>?</p>
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="window.app.hideModal('reserve-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
+                <button onclick="window.app.confirmReservation()" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Sim, Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Cancelar Reserva -->
+    <div id="cancel-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Cancelar Reserva</h2>
+            <p class="mb-6 text-gray-600">Você tem certeza que deseja cancelar a reserva do item: <strong id="cancel-modal-gift-name" class="text-pink-700"></strong>?</p>
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="window.app.hideModal('cancel-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Voltar</button>
+                <button onclick="window.app.confirmCancellation()" class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md">Sim, Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Lista de Presenteadores -->
+    <div id="givers-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">Lista de Convidados e Presentes</h2>
+            <div id="givers-list-content" class="text-gray-700 max-h-96 overflow-y-auto"></div>
+            <div class="mt-8 flex justify-end">
+                <button onclick="window.app.hideModal('givers-modal')" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Senha do Anfitrião -->
+    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-auto modal-enter">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Acesso Restrito</h2>
+            <p class="mb-6 text-gray-600">Por favor, digite a senha de anfitrião para ver a lista.</p>
+            <div>
+                <label for="host-password" class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+                <input type="password" id="host-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500" placeholder="Digite a senha">
+                <p id="password-error-message" class="text-red-500 text-sm mt-1 hidden">Senha incorreta. Tente novamente.</p>
+            </div>
+            <div class="mt-8 flex justify-end space-x-4">
+                <button onclick="window.app.hideModal('password-modal')" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
+                <button onclick="window.app.checkPassword()" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors shadow-md">Acessar</button>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal de Agradecimento -->
+    <div id="thank-you-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-sm mx-auto modal-enter text-center">
+            <h2 class="text-2xl font-bold mb-4 text-pink-700">Obrigado!</h2>
+            <p class="mb-6 text-gray-600">Sua presença foi confirmada com sucesso! Agradecemos seu carinho. Se mudar de ideia sobre o presente, basta visitar esta página novamente.</p>
+            <div class="mt-8 flex justify-end">
+                <button onclick="window.app.hideModal('thank-you-modal')" class="px-6 py-2 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player de Música -->
     <audio id="background-music" loop><source src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_2425232dc1.mp3?filename=lofi-chill-medium-version-159456.mp3" type="audio/mpeg">Seu navegador não suporta o elemento de áudio.</audio>
     <button id="play-pause-btn" class="fixed bottom-5 right-5 bg-pink-600 text-white p-3 rounded-full shadow-lg z-50 hover:bg-pink-700 transition-colors focus:outline-none"><svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></button>
 
     <!-- Scripts do Firebase -->
     <script type="module">
-        // Importações dos módulos do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, onSnapshot, query, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // --- INÍCIO DA ÁREA DE CONFIGURAÇÃO DO FIREBASE ---
-        // Siga o guia para criar seu projeto no Firebase e cole sua configuração aqui.
         const firebaseConfig = {
-     	 apiKey: "AIzaSyDBtbOPBZliKsAzB-gkP7VpCuyQWrhwBVU",
-     	 authDomain: "cha-de-cozinha-kalebe-larissa.firebaseapp.com",
-     	 projectId: "cha-de-cozinha-kalebe-larissa",
-     	 storageBucket: "cha-de-cozinha-kalebe-larissa.firebasestorage.app",
-     	 messagingSenderId: "345870543781",
-     	 appId: "1:345870543781:web:6fb8c06b18ded4c829164c",
-     	 measurementId: "G-WFH6VRF6XM"
+     	    apiKey: "AIzaSyDBtbOPBZliKsAzB-gkP7VpCuyQWrhwBVU",
+     	    authDomain: "cha-de-cozinha-kalebe-larissa.firebaseapp.com",
+     	    projectId: "cha-de-cozinha-kalebe-larissa",
+     	    storageBucket: "cha-de-cozinha-kalebe-larissa.firebasestorage.app",
+     	    messagingSenderId: "345870543781",
+     	    appId: "1:345870543781:web:6fb8c06b18ded4c829164c",
+     	    measurementId: "G-WFH6VRF6XM"
     	};
-        // --- FIM DA ÁREA DE CONFIGURAÇÃO DO FIREBASE ---
-
-        // Inicializa o Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        // Referências das coleções no Firestore
         const giftsCollection = collection(db, 'gifts');
         const guestsCollection = collection(db, 'guests');
-
-        // --- INÍCIO DA ÁREA DE EDIÇÃO ---
         const hostPassword = '*chadecozinha';
-        // --- FIM DA ÁREA DE EDIÇÃO ---
-
-        // Elementos da página
         const giftListContainer = document.getElementById('gift-list');
         const giftListMainContainer = document.getElementById('gift-list-container');
         const loadingState = document.getElementById('loading-state');
@@ -165,22 +282,17 @@
         const passwordErrorMessage = document.getElementById('password-error-message');
         const giversListContent = document.getElementById('givers-list-content');
         const headerText = document.getElementById('header-text');
-
         let currentGiftId = null;
         let guestInfo = null;
         let appGifts = [];
         let currentUser = null;
-
         function renderGifts() {
             giftListContainer.innerHTML = '';
-            // Ordena os presentes para que os não reservados apareçam primeiro
             const sortedGifts = [...appGifts].sort((a, b) => (a.reservedBy ? 1 : 0) - (b.reservedBy ? 1 : 0));
-
             sortedGifts.forEach(gift => {
                 const isReserved = !!gift.reservedBy;
                 const card = document.createElement('div');
                 card.className = `bg-white rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col ${isReserved ? 'opacity-60' : ''}`;
-                
                 let buttonHtml;
                 if (isReserved) {
                     if (currentUser && gift.reservedBy.uid === currentUser.uid) {
@@ -191,13 +303,10 @@
                 } else {
                     buttonHtml = `<div class="p-6"><button onclick="window.app.showModal('reserve-modal', '${gift.id}')" class="w-full bg-pink-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-pink-700 transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">Quero dar este presente!</button></div>`;
                 }
-                
                 card.innerHTML = `<div class="relative"><img src="${gift.imageUrl}" alt="${gift.name}" class="w-full aspect-square object-cover">${isReserved ? '<div class="absolute inset-0 bg-black bg-opacity-30"></div>' : ''}</div><div class="p-6 flex-grow flex flex-col"><h3 class="text-xl font-bold text-gray-800">${gift.name}</h3><p class="text-gray-600 mt-2 flex-grow">${gift.description}</p><div class="mt-4 flex justify-between items-center"><span class="text-2xl font-bold text-pink-700">${gift.price}</span><a href="${gift.purchaseLink}" target="_blank" class="text-pink-600 hover:text-pink-800 font-semibold ${isReserved ? 'pointer-events-none' : ''}">Ver loja</a></div></div>${buttonHtml}`;
                 giftListContainer.appendChild(card);
             });
         }
-        
-        // Colocando funções globais dentro de um objeto para evitar poluir o escopo global
         window.app = {
             showModal(modalId, giftId = null) {
                 const modal = document.getElementById(modalId);
@@ -216,7 +325,6 @@
                 if (modalId === 'companion-details-modal') companionNameInput.focus();
                 if (modalId === 'password-modal') hostPasswordInput.focus();
             },
-
             hideModal(modalId) {
                 const modal = document.getElementById(modalId);
                 const modalContent = modal.querySelector('div.modal-enter');
@@ -225,42 +333,37 @@
                 setTimeout(() => {
                     modal.classList.add('hidden');
                     modalContent.classList.remove('modal-exit-active');
-                     if (modalId === 'password-modal') {
+                    if (modalId === 'password-modal') {
                         hostPasswordInput.value = '';
                         passwordErrorMessage.classList.add('hidden');
                         hostPasswordInput.classList.remove('border-red-500');
                     }
                 }, 300);
             },
-            
             async handleRSVP(isAttending) {
                 const name = rsvpGuestNameInput.value.trim();
                 if (!name) { rsvpErrorMessage.classList.remove('hidden'); rsvpGuestNameInput.classList.add('border-red-500'); return; }
                 guestInfo = { name: name, attending: isAttending, document: null, companions: [] };
-                
-                app.hideModal('rsvp-modal');
-                
+                window.app.hideModal('rsvp-modal');
                 if (isAttending) {
-                    app.showModal('companion-prompt-modal');
+                    window.app.showModal('companion-prompt-modal');
                 } else {
                     await setDoc(doc(guestsCollection, currentUser.uid), guestInfo);
                     initializePage(currentUser);
                 }
             },
-            
             handleCompanionPrompt(hasCompanion) {
-                app.hideModal('companion-prompt-modal');
+                window.app.hideModal('companion-prompt-modal');
                 if (hasCompanion) {
                     companionNameInput.value = '';
                     companionDocumentInput.value = '';
                     companionInstructions.textContent = "Por favor, preencha as informações do seu acompanhante para a lista da portaria.";
                     updateCompanionList();
-                    app.showModal('companion-details-modal');
+                    window.app.showModal('companion-details-modal');
                 } else {
-                    app.showModal('document-modal');
+                    window.app.showModal('document-modal');
                 }
             },
-
             addAnotherCompanion() {
                 const companionData = validateCompanionForm();
                 if (companionData) {
@@ -274,69 +377,61 @@
                     }
                 }
             },
-
             finishCompanionRegistration() {
                 const name = companionNameInput.value.trim();
                 const docValue = companionDocumentInput.value.trim();
                 if (name || docValue) {
                     const companionData = validateCompanionForm();
                     if (companionData) {
-                        if (guestInfo) { guestInfo.companions.push(companionData); } 
+                        if (guestInfo) { guestInfo.companions.push(companionData); }
                         else { return; }
                     } else { return; }
                 }
-                app.hideModal('companion-details-modal');
-                app.showModal('document-modal');
+                window.app.hideModal('companion-details-modal');
+                window.app.showModal('document-modal');
             },
-
             async saveDocument() {
                 const docValue = guestDocumentInput.value.trim();
                 if (!docValue) { documentErrorMessage.classList.remove('hidden'); guestDocumentInput.classList.add('border-red-500'); return; }
                 if (guestInfo) {
                     guestInfo.document = docValue;
                     await setDoc(doc(guestsCollection, currentUser.uid), guestInfo);
-                    app.hideModal('document-modal');
+                    window.app.hideModal('document-modal');
                     initializePage(currentUser);
                 }
             },
-            
             async confirmPresenceOnly() {
                 if (guestInfo) {
                     await setDoc(doc(guestsCollection, currentUser.uid), guestInfo);
-                    app.showModal('thank-you-modal');
+                    window.app.showModal('thank-you-modal');
                 }
             },
-
             async checkPassword() {
                 const enteredPassword = hostPasswordInput.value;
                 if (enteredPassword === hostPassword) {
-                    app.hideModal('password-modal');
-                    await app.showGiversList();
+                    window.app.hideModal('password-modal');
+                    await window.app.showGiversList();
                 } else {
                     passwordErrorMessage.classList.remove('hidden');
                     hostPasswordInput.classList.add('border-red-500');
                 }
             },
-
             async confirmReservation() {
                 if (guestInfo && currentUser) {
                     await setDoc(doc(guestsCollection, currentUser.uid), guestInfo);
                     const giftRef = doc(giftsCollection, currentGiftId);
                     await updateDoc(giftRef, { reservedBy: { uid: currentUser.uid, name: guestInfo.name } });
-                    app.hideModal('reserve-modal');
+                    window.app.hideModal('reserve-modal');
                 }
             },
-            
             async confirmCancellation() {
                 const giftRef = doc(giftsCollection, currentGiftId);
                 await updateDoc(giftRef, { reservedBy: null });
-                app.hideModal('cancel-modal');
+                window.app.hideModal('cancel-modal');
             },
-            
             async showGiversList() {
                 const guestsSnapshot = await getDocs(guestsCollection);
                 const guests = guestsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
                 if (guests.length === 0) {
                     giversListContent.innerHTML = '<p>Nenhum convidado confirmou presença ainda.</p>';
                 } else {
@@ -359,17 +454,14 @@
                     listHtml += '</ul>';
                     giversListContent.innerHTML = listHtml;
                 }
-                app.showModal('givers-modal');
+                window.app.showModal('givers-modal');
             }
         };
-        // Fim do objeto window.app
-
         function updateCompanionList() {
             if (guestInfo && guestInfo.companions.length > 0) {
                 companionListDiv.innerHTML = '<strong class="block mb-2">Acompanhantes adicionados:</strong><ul class="list-disc pl-5">' + guestInfo.companions.map(c => `<li>${c.name}</li>`).join('') + '</ul>';
             } else { companionListDiv.innerHTML = ''; }
         }
-
         function validateCompanionForm() {
             const name = companionNameInput.value.trim();
             const doc = companionDocumentInput.value.trim();
@@ -380,17 +472,14 @@
             else { companionDocumentError.classList.add('hidden'); companionDocumentInput.classList.remove('border-red-500'); }
             return hasError ? null : { name, document: doc };
         }
-
         async function initializePage(user) {
             const guestRef = doc(guestsCollection, user.uid);
             const guestSnap = await getDoc(guestRef);
-            
             if (guestSnap.exists()) {
                 guestInfo = guestSnap.data();
-                
                 if (guestInfo.attending && !guestInfo.document) {
                     headerText.textContent = `Olá, ${guestInfo.name}! Faltam alguns passos para finalizar.`;
-                    app.showModal('companion-prompt-modal');
+                    window.app.showModal('companion-prompt-modal');
                 } else {
                     headerText.textContent = `Olá, ${guestInfo.name}! Sua presença é o maior presente! Mas, se desejar nos presentear, preparamos esta lista com muito carinho.`;
                     loadingState.classList.add('hidden');
@@ -401,11 +490,9 @@
             } else {
                 headerText.textContent = `Queridos amigos e familiares, sua presença é o maior presente! Para continuar, por favor, confirme sua presença.`;
                 loadingState.classList.add('hidden');
-                app.showModal('rsvp-modal');
+                window.app.showModal('rsvp-modal');
             }
         }
-        
-        // Autenticação e inicialização
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -417,13 +504,11 @@
                 signInAnonymously(auth).catch((error) => console.error("Erro na autenticação anônima:", error));
             }
         });
-
-        // Event Listeners para fechar modais
         [rsvpModal, documentModal, companionPromptModal, companionDetailsModal, reserveModal, giversModal, passwordModal, cancelModal, thankYouModal].forEach(modal => {
             if (modal) {
                 modal.addEventListener('click', (event) => {
                     if (event.target === modal && !['rsvp-modal', 'document-modal', 'companion-prompt-modal', 'companion-details-modal'].includes(modal.id)) {
-                        app.hideModal(modal.id);
+                        window.app.hideModal(modal.id);
                     }
                 });
             }
@@ -431,12 +516,10 @@
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 ['reserve-modal', 'cancel-modal', 'givers-modal', 'password-modal', 'thank-you-modal'].forEach(id => {
-                    if (!document.getElementById(id).classList.contains('hidden')) app.hideModal(id);
+                    if (!document.getElementById(id).classList.contains('hidden')) window.app.hideModal(id);
                 });
             }
         });
-
-        // Lógica do Player de Música
         const backgroundMusic = document.getElementById('background-music');
         const playPauseBtn = document.getElementById('play-pause-btn');
         if (backgroundMusic && playPauseBtn) {
